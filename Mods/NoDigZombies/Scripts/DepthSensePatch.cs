@@ -67,15 +67,18 @@ namespace NoDigZombies
             var snapshot = Snapshots.GetValue(senses, SenseSnapshot.Create);
 
             float depth = CalculateDepth(world, player.position);
-            float perceptionMultiplier = EvaluatePerceptionMultiplier(depth);
-            float horizontalFactor = EvaluateHorizontalFactor(depth);
+            float horizontalDistance = CalculateHorizontalDistance(__instance.position, player.position);
+            float factorY = EvaluateDepthFactor(depth);
+            float factorXZ = EvaluateHorizontalFactor(horizontalDistance);
+            // Combine both axes following the advanced perception rules (final = base * factorY * factorXZ).
+            float finalMultiplier = CalculateFinalMultiplier(factorY, factorXZ);
 
             foreach (var channel in PerceptionChannels)
             {
-                ApplyMultiplierToSense(senses, channel, perceptionMultiplier, snapshot);
+                ApplyMultiplierToSense(senses, channel, finalMultiplier, snapshot);
             }
 
-            ApplyHorizontalRangeModifier(senses, horizontalFactor, snapshot);
+            ApplyHorizontalRangeModifier(senses, finalMultiplier, snapshot);
         }
 
         private static EntityPlayer GetRelevantPlayer(World world, Vector3 referencePosition)
@@ -132,7 +135,18 @@ namespace NoDigZombies
             return depth < 0f ? 0f : depth;
         }
 
-        private static float EvaluatePerceptionMultiplier(float depth)
+        private static float CalculateHorizontalDistance(Vector3 zombiePosition, Vector3 playerPosition)
+        {
+            float deltaX = zombiePosition.x - playerPosition.x;
+            float deltaZ = zombiePosition.z - playerPosition.z;
+            return Mathf.Sqrt(deltaX * deltaX + deltaZ * deltaZ);
+        }
+
+        /// <summary>
+        /// Returns the vertical perception factor (Factor Y) based solely on the player's depth.
+        /// The thresholds are expressed in blocks below the surface and can be tweaked to taste.
+        /// </summary>
+        private static float EvaluateDepthFactor(float depth)
         {
             if (depth >= 22f)
             {
@@ -162,19 +176,41 @@ namespace NoDigZombies
             return 1f;
         }
 
-        private static float EvaluateHorizontalFactor(float depth)
+        /// <summary>
+        /// Returns the horizontal perception factor (Factor XZ) using the zombie/player lateral distance.
+        /// Modify the block thresholds or multipliers to adjust how quickly zombies lose track underground.
+        /// </summary>
+        private static float EvaluateHorizontalFactor(float distance)
         {
-            if (depth >= 20f)
+            if (distance <= 15f)
             {
-                return 0f;
+                return 1f;
             }
 
-            if (depth >= 10f)
+            if (distance <= 30f)
+            {
+                return 0.8f;
+            }
+
+            if (distance <= 50f)
             {
                 return 0.5f;
             }
 
-            return 1f;
+            return 0.1f;
+        }
+
+        /// <summary>
+        /// Combines the vertical and horizontal factors, ensuring the 22+ block depth rule is respected.
+        /// </summary>
+        private static float CalculateFinalMultiplier(float factorY, float factorXZ)
+        {
+            if (factorY <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.Clamp01(factorY * factorXZ);
         }
 
         private static void ApplyMultiplierToSense(EntitySenses senses, EnumEntitySenseType senseType, float multiplier, SenseSnapshot snapshot)
