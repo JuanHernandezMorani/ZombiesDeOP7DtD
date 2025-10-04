@@ -97,3 +97,32 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+# Ignore common binary assets for mod project
+*.png
+*.jpg
+*.jpeg
+*.dds
+*.tga
+*.gif
+*.bmp
+*.tif
+*.tiff
+*.psd
+*.ai
+*.mp3
+*.ogg
+*.wav
+*.mp4
+*.mov
+*.wmv
+*.avi
+*.zip
+*.7z
+*.rar
+*.dll
+*.so
+*.dylib
+*.exe
+*.pdb
+*.mdb
+*.bin

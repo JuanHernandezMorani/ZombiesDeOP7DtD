@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+    <ModInfo>
+        <Name value="zzz_ZombieDetectionHUD" />
+        <Description value="Muestra un HUD en tiempo real con el estado de detección por zombies, compatible con War3zuk." />
+        <Author value="ChatGPT" />
+        <Version value="1.0" />
+        <GameVersion value="2.3" />
+        <LoadAfter value="War3zukAIO" />
+        <DLLs>
+            <dll value="ZombieDetectionHUD.dll" />
+        </DLLs>
+        <HarmonyMods>
+            <mod name="ZombieDetectionHUD" value="ZombieDetectionHUD.DetectionHudPatcher" />
+        </HarmonyMods>
+    </ModInfo>
+</xml>
