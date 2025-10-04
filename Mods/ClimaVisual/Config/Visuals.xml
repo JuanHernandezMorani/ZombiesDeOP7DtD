@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Módulo ClimaVisual para ZombiesDeOP7DtD.
+    Cambia niebla, densidad de nubes, intensidad de lluvia y colores de amanecer/atardecer sin modificar el loot.
+    Todas las secciones tienen el atributo enabled="true|false" para poder activarlas o desactivarlas fácilmente.
+    Los valores numéricos usan flotantes entre 0.0 y 1.0 salvo que se indique lo contrario.
+-->
+<visuals enabled="true">
+    <!--
+        Control de la transición día/noche. Los valores representan el porcentaje del día (0.0 = medianoche, 0.5 = mediodía).
+        Ajusta estos parámetros si usas una duración del día distinta. El motor recalcula suavemente las transiciones.
+    -->
+    <cycle transitionSpeed="2.5" dawnStart="0.18" dayStart="0.24" duskStart="0.70" nightStart="0.80" />
+
+    <!-- Ajustes de niebla. FogIntensityDay/FogIntensityNight controlan la densidad objetivo en cada fase. -->
+    <fog enabled="true">
+        <FogIntensityDay value="0.0022" />
+        <FogIntensityNight value="0.0055" />
+        <DayColor value="0.78,0.81,0.86" />
+        <NightColor value="0.22,0.26,0.33" />
+    </fog>
+
+    <!-- Ajustes de nubes. CloudDensityDay/CloudDensityNight controlan la opacidad global de las nubes. -->
+    <clouds enabled="true">
+        <CloudDensityDay value="0.35" />
+        <CloudDensityNight value="0.62" />
+    </clouds>
+
+    <!-- Ajustes de lluvia. RainOpacity afecta la visibilidad del efecto; Intensities definen cuánta lluvia máxima aplicar. -->
+    <rain enabled="true">
+        <RainOpacity value="0.45" />
+        <RainIntensityDay value="0.15" />
+        <RainIntensityNight value="0.35" />
+    </rain>
+
+    <!-- Colores del amanecer y atardecer. Usa valores RGB normalizados (0-1). -->
+    <sun enabled="true">
+        <DawnColor value="0.94,0.58,0.36" />
+        <DayColor value="0.83,0.87,0.92" />
+        <DuskColor value="0.68,0.45,0.78" />
+        <NightColor value="0.18,0.22,0.32" />
+    </sun>
+
+    <!--
+        Para desactivar por completo un bloque (p.ej. la lluvia) cambia enabled="false".
+        Puedes recargar el archivo en caliente: el sistema vigila los cambios y los aplica automáticamente.
+    -->
+</visuals>
