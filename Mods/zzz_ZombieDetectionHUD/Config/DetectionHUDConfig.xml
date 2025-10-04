@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DetectionHUDConfig>
+    <UpdateInterval value="0.5" />
+    <DetectionRadius value="50" />
+    <StealthRadius value="35" />
+    <LineOfSightMaxAngle value="85" />
+    <Position>
+        <Anchor value="TopRight" />
+        <OffsetX value="32" />
+        <OffsetY value="64" />
+    </Position>
+    <Text>
+        <Detected value="[DETECTADO]" />
+        <Hidden value="[OCULTO]" />
+        <FontSize value="32" />
+        <Outline value="true" />
+    </Text>
+    <Debug>
+        <Enabled value="false" />
+    </Debug>
+</DetectionHUDConfig>
