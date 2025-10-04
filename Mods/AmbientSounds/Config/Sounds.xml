@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Archivo de configuración de AmbientSounds.
+    - enabled controla si el módulo está activo.
+    - masterVolume define el volumen máximo del bucle ambiente (0.0 - 1.0).
+    - priority indica la prioridad relativa frente a otros sonidos (0.0 - 1.0).
+    Cada nodo <ambient> admite:
+        biome        -> nombre del bioma (forest, desert, snow, wasteland, etc.).
+        condition    -> condición especial (default, rain, storm, wind, cave...).
+        clip         -> nombre del clip definido en el banco de sonidos del juego.
+        volume       -> escala aplicada sobre masterVolume.
+        fadeIn/fadeOut -> duración de la atenuación progresiva en segundos.
+        radius       -> distancia máxima para la atenuación espacial (0 = 2D).
+-->
+<Sounds enabled="true" masterVolume="0.45" priority="0.35">
+    <defaults fadeIn="4.0" fadeOut="6.0" radius="0" />
+
+    <!-- Biomas estándar -->
+    <ambient biome="forest" condition="default" clip="ambient_forest_day" volume="1.0" />
+    <ambient biome="forest" condition="night" clip="ambient_forest_night" volume="0.85" />
+    <ambient biome="desert" condition="default" clip="ambient_desert_day" volume="0.95" />
+    <ambient biome="snow" condition="default" clip="ambient_snow_wind" volume="0.9" />
+    <ambient biome="wasteland" condition="default" clip="ambient_wasteland_low" volume="0.75" />
+
+    <!-- Condiciones dinámicas -->
+    <ambient biome="any" condition="rain" clip="ambient_rain_light" volume="0.65" fadeIn="2.5" fadeOut="4.0" />
+    <ambient biome="any" condition="storm" clip="ambient_storm_heavy" volume="0.55" fadeIn="1.5" fadeOut="3.5" />
+    <ambient biome="any" condition="wind" clip="ambient_wind_gusts" volume="0.6" radius="40" />
+    <ambient biome="any" condition="cave" clip="ambient_cave_drones" volume="0.7" fadeIn="3.5" fadeOut="5.5" />
+
+    <!-- Reserva silenciosa para desactivar en ciertas zonas -->
+    <ambient biome="burntforest" condition="default" clip="" volume="0.0" />
+</Sounds>
