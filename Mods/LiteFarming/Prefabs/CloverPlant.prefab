@@ -1,0 +1,23 @@
+# LiteFarming Clover Plant Prefab Definition
+version: 1
+identifier: litefarmingCloverPlant
+stages:
+  - model: LiteFarming/Clover/Stage1
+    growth_time: 4
+    requires_light: true
+    requires_water: true
+  - model: LiteFarming/Clover/Stage2
+    growth_time: 4
+    requires_light: true
+    requires_water: true
+  - model: LiteFarming/Clover/Stage3
+    growth_time: 4
+    requires_light: true
+    requires_water: true
+harvest:
+  yield_item: resourceLiteFarmingCloverLeaf
+  yield_range: 3-6
+  bonus_with_fortune: true
+notes: |
+  Placeholder prefab data for integration with the in-game Unity prefab once exported.
+  Ensure the prefab is linked to the litefarming plant block to enable growth stages.
