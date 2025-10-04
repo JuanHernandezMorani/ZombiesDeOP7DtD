@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+    <ModInfo>
+        <Name value="ExtendedStorageReach" />
+        <Description value="Extiende la distancia efectiva para interactuar con cofres y contenedores en ZombiesDeOP7DtD." />
+        <Author value="ChatGPT" />
+        <Version value="1.0" />
+        <GameVersion value="2.3" />
+        <DLLs>
+            <dll value="ExtendedStorageReach.dll" />
+        </DLLs>
+        <HarmonyMods>
+            <mod name="ExtendedStorageReach" value="ExtendedStorageReach.StorageReachPatch" />
+        </HarmonyMods>
+    </ModInfo>
+</xml>
