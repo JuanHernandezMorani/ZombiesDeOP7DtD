@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+    <ModInfo>
+        <Name value="AmbientSounds" />
+        <Description value="Bucle ambiental dinámico con control de volumen, prioridad y condiciones climáticas." />
+        <Author value="ChatGPT" />
+        <Version value="1.0" />
+        <GameVersion value="2.3" />
+        <DLLs>
+            <dll value="AmbientSounds.dll" />
+        </DLLs>
+        <HarmonyMods>
+            <mod name="AmbientSounds" value="AmbientSounds.AmbientSoundsBootstrap" />
+        </HarmonyMods>
+    </ModInfo>
+</xml>
