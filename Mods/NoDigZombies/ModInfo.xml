@@ -2,9 +2,15 @@
 <xml>
     <ModInfo>
         <Name value="NoDigZombies" />
-        <Description value="Reduce zombie hearing range underground." />
+        <Description value="Reduce zombie perception underground using Harmony depth scaling." />
         <Author value="ChatGPT" />
-        <Version value="1.0" />
+        <Version value="1.1" />
         <GameVersion value="2.3" />
+        <DLLs>
+            <dll value="NoDigZombies.dll" />
+        </DLLs>
+        <HarmonyMods>
+            <mod name="NoDigZombies" value="NoDigZombies.DepthSensePatch" />
+        </HarmonyMods>
     </ModInfo>
 </xml>
