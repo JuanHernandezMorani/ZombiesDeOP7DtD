@@ -1,4 +1,0 @@
-<InventoryButtons>
-    <Button name="Sort" enabled="true" />
-    <Button name="LootAll" enabled="true" />
-</InventoryButtons>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configs>
-    <set xpath="/entity_classes/entity_class[contains(@name, 'zombie')]/property[@name='HearingRange']/@value"
-         value="string(number(@value) div 2)" />
-</configs>
