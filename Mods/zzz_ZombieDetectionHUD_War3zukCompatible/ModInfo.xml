@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+  <ModInfo>
+    <Name>zzz_ZombieDetectionHUD_War3zukCompatible</Name>
+    <Description>HUD de detección de zombies - 100% C# - Compatible con War3zuk AIO</Description>
+    <Author>JuanHernandezMorani</Author>
+    <Version>1.0.0</Version>
+    <Website>https://github.com/JuanHernandezMorani/ZombiesDeOP7DtD</Website>
+    <LoadAfter>War3zukAIO</LoadAfter>
+    <HarmonyMod>true</HarmonyMod>
+    <HarmonyFolder>Harmony</HarmonyFolder>
+  </ModInfo>
+</xml>
