@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mod>
+  <name value="ZombiesDeOP Unified"/>
+  <description value="Sistema unificado de detección y comportamiento de zombies - Compatible con War3zuk AIO"/>
+  <author value="JuanHernandezMorani"/>
+  <version value="2.4.0"/>
+  <target version="A21"/>
+  <load order="After" value="War3zukAIO"/>
+  <harmony value="true"/>
+  <harmonyFolder value="Harmony"/>
+</mod>

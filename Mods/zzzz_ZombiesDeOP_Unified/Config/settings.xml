@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ZombiesDeOP>
+  <DetectionRange>45</DetectionRange>
+  <HearingRange>20</HearingRange>
+  <EnableHUD>true</EnableHUD>
+  <DebugMode>false</DebugMode>
+</ZombiesDeOP>
