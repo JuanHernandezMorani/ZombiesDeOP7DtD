@@ -10,9 +10,9 @@ namespace ZombiesDeOP.Harmony
     {
         private static void Postfix()
         {
-            ModLogger.Log("🎯 [ZombiesDeOP] Mod activo - Versión 2.4 Compatible");
-            ModLogger.Log($"🔧 [ZombiesDeOP] Detección: {ModSettings.DetectionRange}m");
-            ModLogger.Log($"🔧 [ZombiesDeOP] War3zuk: {War3zukCompatibility.IsWar3zukInstalled}");
+            ModLogger.Info("🎯 [ZombiesDeOP] Mod activo - Versión 2.4 Compatible");
+            ModLogger.Info($"🔧 [ZombiesDeOP] Detección: {ModSettings.DetectionRange}m");
+            ModLogger.Info($"🔧 [ZombiesDeOP] War3zuk: {War3zukCompatibility.IsWar3zukInstalled}");
         }
     }
 }

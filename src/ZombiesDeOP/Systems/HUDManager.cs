@@ -29,7 +29,7 @@ namespace ZombiesDeOP.Systems
 
             if (!ModSettings.EnableHUD)
             {
-                ModLogger.Log("ℹ️ [ZombiesDeOP] HUD deshabilitado por configuración");
+                ModLogger.Info("ℹ️ [ZombiesDeOP] HUD deshabilitado por configuración");
                 return;
             }
 
@@ -40,7 +40,7 @@ namespace ZombiesDeOP.Systems
 
             initialized = true;
             displayTimer = 0f;
-            ModLogger.Log("🖥️ [ZombiesDeOP] HUD inicializado");
+            ModLogger.Info("🖥️ [ZombiesDeOP] HUD inicializado");
         }
 
         public static void Shutdown()
@@ -70,7 +70,7 @@ namespace ZombiesDeOP.Systems
             string status = detected ? "DETECTADO" : "OCULTO";
             string message = $"[{status}] {enemy.EntityName} - {distance:F1}m";
             Messages.Enqueue(message);
-            ModLogger.Debug($"HUD -> {message}");
+            ModLogger.LogDebug($"HUD -> {message}");
         }
 
         private static void OnGameUpdate()
@@ -97,7 +97,13 @@ namespace ZombiesDeOP.Systems
             }
 
             string message = Messages.Peek();
-            GameManager.Instance?.ChatMessageServer(null, EChatType.Whisper, -1, message, null, EChatSenderType.System);
+            GameManager.Instance?.ChatMessageServer(
+                message,
+                EnumGameMessagesType.Chat,
+                false,
+                null,
+                false,
+                null);
         }
     }
 }

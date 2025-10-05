@@ -44,29 +44,29 @@ namespace ZombiesDeOP.Harmony
                 float distanceToPlayer = __instance.GetDistance(localPlayer);
                 bool isTargetingPlayer = __instance.GetAttackTarget() == localPlayer;
 
-                ModLogger.Debug($"👁️ [ZombiesDeOP] Detección -> Enemigo: {__instance.EntityName}, Agachado: {isCrouching}, Distancia: {distanceToPlayer:F2}, Target: {isTargetingPlayer}");
+                ModLogger.LogDebug($"👁️ [ZombiesDeOP] Detección -> Enemigo: {__instance.EntityName}, Agachado: {isCrouching}, Distancia: {distanceToPlayer:F2}, Target: {isTargetingPlayer}");
 
                 if (isTargetingPlayer)
                 {
                     overlay.SetState("seen");
-                    ModLogger.Log("👁️ [ZombiesDeOP] Estado detectado: SEEN");
+                    ModLogger.Info("👁️ [ZombiesDeOP] Estado detectado: SEEN");
                     return;
                 }
 
                 if (isCrouching && distanceToPlayer <= DetectionDistance)
                 {
                     overlay.SetState("hidden");
-                    ModLogger.Log("👁️ [ZombiesDeOP] Estado detectado: HIDDEN");
+                    ModLogger.Info("👁️ [ZombiesDeOP] Estado detectado: HIDDEN");
                 }
                 else if (distanceToPlayer > DetectionDistance)
                 {
                     overlay.SetState("none");
-                    ModLogger.Debug("👁️ [ZombiesDeOP] Estado detectado: NONE (fuera de rango)");
+                    ModLogger.LogDebug("👁️ [ZombiesDeOP] Estado detectado: NONE (fuera de rango)");
                 }
                 else
                 {
                     overlay.SetState("none");
-                    ModLogger.Debug("👁️ [ZombiesDeOP] Estado detectado: NONE (sin condiciones)");
+                    ModLogger.LogDebug("👁️ [ZombiesDeOP] Estado detectado: NONE (sin condiciones)");
                 }
             }
             catch (Exception e)
@@ -102,11 +102,11 @@ namespace ZombiesDeOP.Harmony
             }
             catch (TargetInvocationException e)
             {
-                ModLogger.Debug($"👁️ [ZombiesDeOP] Error evaluando crouch (invocación): {e.InnerException ?? e}");
+                ModLogger.LogDebug($"👁️ [ZombiesDeOP] Error evaluando crouch (invocación): {e.InnerException ?? e}");
             }
             catch (Exception e)
             {
-                ModLogger.Debug($"👁️ [ZombiesDeOP] Error evaluando crouch: {e}");
+                ModLogger.LogDebug($"👁️ [ZombiesDeOP] Error evaluando crouch: {e}");
             }
 
             return false;

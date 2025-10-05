@@ -15,7 +15,7 @@ namespace ZombiesDeOP.Systems
             }
 
             initialized = true;
-            ModLogger.Log("🧠 [ZombiesDeOP] Gestor de comportamiento inicializado");
+            ModLogger.Info("🧠 [ZombiesDeOP] Gestor de comportamiento inicializado");
         }
 
         public static void Shutdown()
@@ -37,7 +37,7 @@ namespace ZombiesDeOP.Systems
 
             if (ModSettings.DebugMode)
             {
-                ModLogger.Debug($"Refrescando IA para {enemy.EntityName} ({enemy.entityId})");
+                ModLogger.LogDebug($"Refrescando IA para {enemy.EntityName} ({enemy.entityId})");
             }
         }
 
