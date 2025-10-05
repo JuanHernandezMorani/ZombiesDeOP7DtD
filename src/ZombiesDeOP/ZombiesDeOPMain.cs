@@ -11,7 +11,7 @@ namespace ZombiesDeOP
     public class ZombiesDeOPMain : IModApi
     {
         private const string HARMONY_ID = "com.juanhernandez.zombiesdeop.a21";
-        private Harmony harmony;
+        private static Harmony harmonyInstance;
         private static bool overlayInitialized;
 
         public void InitMod(Mod mod)
@@ -22,8 +22,11 @@ namespace ZombiesDeOP
 
                 ModLogger.Log("🎯 [ZombiesDeOP] Iniciando mod para Alpha 21...");
 
-                harmony = new Harmony(HARMONY_ID);
-                harmony.PatchAll(Assembly.GetExecutingAssembly());
+                if (harmonyInstance == null)
+                {
+                    harmonyInstance = new Harmony(HARMONY_ID);
+                    harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+                }
 
                 ModSettings.Load();
                 War3zukCompatibility.ApplyCompatibility();
@@ -45,7 +48,8 @@ namespace ZombiesDeOP
         {
             try
             {
-                harmony?.UnpatchAll(HARMONY_ID);
+                harmonyInstance?.UnpatchAll(HARMONY_ID);
+                harmonyInstance = null;
                 HUDManager.Shutdown();
                 DetectionSystem.Shutdown();
                 ShutdownOverlay();
