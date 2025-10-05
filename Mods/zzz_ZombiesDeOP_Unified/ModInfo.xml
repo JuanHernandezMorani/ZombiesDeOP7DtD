@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ModInfo>
-  <Name>zzz_ZombiesDeOP_Unified</Name>
-  <Description>Sistema unificado de detección y comportamiento de zombies - Compatible con War3zuk AIO</Description>
-  <Author>JuanHernandezMorani</Author>
-  <Version>2.0.0</Version>
-  <LoadAfter>War3zukAIO</LoadAfter>
-  <HarmonyMod>true</HarmonyMod>
-  <HarmonyFolder>HarmonyPatches</HarmonyFolder>
-</ModInfo>
+<xml>
+	<Name value="zzz_ZombiesDeOP_Unified"/>
+	<DisplayName value="Zombies DeOP"/>
+	<Version value="1.0"/>
+	<Description value="Better detection system, with small changes in biomes, climate, and more."/>
+	<Author value="JuanHernandezMorani"/>
+  <LoadAfter value="War3zuk_AIO_Overhaul"/>
+</xml>
