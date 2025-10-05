@@ -20,25 +20,21 @@ namespace ZombiesDeOP
         {
             try
             {
-                ModContext.Initialize(mod);
+                TryInitializeContext(mod);
 
-                ModLogger.Info("🎯 [ZombiesDeOP] Iniciando mod para Alpha 21...");
+                ModLogger.Info("🎯 [ZombiesDeOP] Iniciando mod v2.4...");
 
                 ModSettings.Load();
-                War3zukCompatibility.ApplyCompatibility();
+                ApplyCompatibilitySafe();
+                InitializeHarmonySafe();
+                CreateRuntimeSystems();
+                InitializeGameplaySystems();
 
-                EnsureHarmony();
-                EnsureRuntimeHost();
-
-                DetectionSystem.Initialize();
-                HUDManager.Initialize();
-                BehaviorManager.Initialize();
-
-                ModLogger.Info("✅ [ZombiesDeOP] Mod cargado exitosamente");
+                ModLogger.Info("✅ [ZombiesDeOP] Mod inicializado completamente");
             }
             catch (Exception e)
             {
-                ModLogger.Error("❌ [ZombiesDeOP] Error en inicialización", e);
+                ModLogger.Error("❌ [ZombiesDeOP] Error crítico en inicialización", e);
             }
         }
 
@@ -84,47 +80,102 @@ namespace ZombiesDeOP
             }
         }
 
-        private static void EnsureHarmony()
+        private static void TryInitializeContext(Mod mod)
         {
+            try
+            {
+                ModContext.Initialize(mod);
+            }
+            catch (Exception e)
+            {
+                ModLogger.Warn($"⚠️ [ZombiesDeOP] No se pudo inicializar el contexto del mod: {e.Message}");
+            }
+        }
+
+        private static void ApplyCompatibilitySafe()
+        {
+            try
+            {
+                War3zukCompatibility.ApplyCompatibility();
+            }
+            catch (Exception e)
+            {
+                ModLogger.Warn($"⚠️ [ZombiesDeOP] Error aplicando compatibilidad War3zuk: {e.Message}");
+            }
+        }
+
+        private static void InitializeHarmonySafe()
+        {
+            if (!ModSettings.EnableHarmonyPatch)
+            {
+                ModLogger.Warn("⚠️ [ZombiesDeOP] Harmony deshabilitado por configuración; continuando con modo polling");
+                return;
+            }
+
             if (harmonyInstance != null)
             {
                 return;
             }
 
-            harmonyInstance = new HarmonyLib.Harmony(HARMONY_ID);
-
             try
             {
+                harmonyInstance = new HarmonyLib.Harmony(HARMONY_ID);
                 harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
-                ModLogger.Info("[ZombiesDeOP] PatchAll OK (v2.4)");
+                ModLogger.Info("✅ [ZombiesDeOP] Harmony patch aplicado correctamente");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                ModLogger.Error("⚠️ [ZombiesDeOP] Error aplicando parches Harmony", ex);
+                harmonyInstance = null;
+                ModLogger.Warn($"⚠️ [ZombiesDeOP] Error en Harmony: {e.Message} - Continuando con polling system");
             }
         }
 
-        private static void EnsureRuntimeHost()
+        private static void CreateRuntimeSystems()
         {
-            if (runtimeHost != null)
+            try
             {
-                return;
+                if (runtimeHost == null)
+                {
+                    runtimeHost = new GameObject("ZombiesDeOP_Runtime");
+                    runtimeHost.hideFlags = HideFlags.HideAndDontSave;
+                    GameObject.DontDestroyOnLoad(runtimeHost);
+                }
+
+                overlayComponent = runtimeHost.GetComponent<UIOverlayComponent>() ?? runtimeHost.AddComponent<UIOverlayComponent>();
+                VisibilityOverlaySystem.Initialize(overlayComponent);
+                overlayComponent = VisibilityOverlaySystem.OverlayComponent ?? overlayComponent;
+                overlayInitialized = VisibilityOverlaySystem.OverlayComponent != null;
+
+                if (runtimeHost.GetComponent<DetectionSystemRuntime>() == null)
+                {
+                    runtimeHost.AddComponent<DetectionSystemRuntime>();
+                }
+
+                ModLogger.Info("✅ [ZombiesDeOP] Sistemas runtime creados correctamente");
             }
-
-            runtimeHost = new GameObject("ZombiesDeOP_Runtime");
-            runtimeHost.hideFlags = HideFlags.HideAndDontSave;
-            GameObject.DontDestroyOnLoad(runtimeHost);
-
-            overlayComponent = runtimeHost.GetComponent<UIOverlayComponent>() ?? runtimeHost.AddComponent<UIOverlayComponent>();
-            VisibilityOverlaySystem.Initialize(overlayComponent);
-            overlayInitialized = true;
-
-            if (runtimeHost.GetComponent<DetectionSystemRuntime>() == null)
+            catch (Exception e)
             {
-                runtimeHost.AddComponent<DetectionSystemRuntime>();
+                ModLogger.Error("❌ [ZombiesDeOP] Error creando sistemas runtime", e);
             }
+        }
 
-            ModLogger.Info("🧠 [ZombiesDeOP] Runtime host inicializado para detección");
+        private static void InitializeGameplaySystems()
+        {
+            ExecuteSafely(DetectionSystem.Initialize, "sistema de detección");
+            ExecuteSafely(HUDManager.Initialize, "HUD");
+            ExecuteSafely(BehaviorManager.Initialize, "sistema de comportamiento");
+        }
+
+        private static void ExecuteSafely(Action action, string description)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                ModLogger.Error($"❌ [ZombiesDeOP] Error inicializando {description}", e);
+            }
         }
 
         private static void ShutdownRuntimeHost()
