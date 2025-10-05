@@ -1,0 +1,59 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\braia\\OneDrive\\Desktop\\7DtD mods\\ZombiesDeOP7DtD\\src\\ZombiesDeOP\\ZombiesDeOP.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\braia\\OneDrive\\Desktop\\7DtD mods\\ZombiesDeOP7DtD\\src\\ZombiesDeOP\\ZombiesDeOP.csproj": {
+      "version": "2.4.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\braia\\OneDrive\\Desktop\\7DtD mods\\ZombiesDeOP7DtD\\src\\ZombiesDeOP\\ZombiesDeOP.csproj",
+        "projectName": "ZombiesDeOP",
+        "projectPath": "C:\\Users\\braia\\OneDrive\\Desktop\\7DtD mods\\ZombiesDeOP7DtD\\src\\ZombiesDeOP\\ZombiesDeOP.csproj",
+        "packagesPath": "C:\\Users\\braia\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\braia\\OneDrive\\Desktop\\7DtD mods\\ZombiesDeOP7DtD\\src\\ZombiesDeOP\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\braia\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -11,7 +11,7 @@ namespace ZombiesDeOP
     public class ZombiesDeOPMain : IModApi
     {
         private const string HARMONY_ID = "com.juanhernandez.zombiesdeop.a21";
-        private static Harmony harmonyInstance;
+        private static HarmonyLib.Harmony harmonyInstance;
         private static bool overlayInitialized;
 
         public void InitMod(Mod mod)
@@ -24,7 +24,7 @@ namespace ZombiesDeOP
 
                 if (harmonyInstance == null)
                 {
-                    harmonyInstance = new Harmony(HARMONY_ID);
+                    harmonyInstance = new HarmonyLib.Harmony(HARMONY_ID);
                     harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
                 }
 

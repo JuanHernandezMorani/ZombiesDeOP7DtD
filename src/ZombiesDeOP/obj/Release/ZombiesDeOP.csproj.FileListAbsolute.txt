@@ -1,0 +1,10 @@
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.csproj.AssemblyReference.cache
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.AssemblyInfoInputs.cache
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.AssemblyInfo.cs
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.csproj.CoreCompileInputs.cache
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.sourcelink.json
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\bin\Release\ZombiesDeOP.dll
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\bin\Release\ZombiesDeOP.pdb
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.dll
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.pdb

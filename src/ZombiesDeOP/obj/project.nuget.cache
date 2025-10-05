@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ed4Hi1IOq0M=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\braia\\OneDrive\\Desktop\\7DtD mods\\ZombiesDeOP7DtD\\src\\ZombiesDeOP\\ZombiesDeOP.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\braia\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\braia\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.3\\microsoft.netframework.referenceassemblies.net472.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -42,6 +42,7 @@ namespace ZombiesDeOP.Systems
         {
             try
             {
+                // Candidatos relativos al directorio del mod (resueltos por ModContext)
                 string[] candidates =
                 {
                     Path.Combine("Resources", imageName),
@@ -73,7 +74,8 @@ namespace ZombiesDeOP.Systems
                     wrapMode = TextureWrapMode.Clamp
                 };
 
-                if (!ImageConversion.LoadImage(texture, data))
+                // Prefijo explícito para asegurar resolución del símbolo con el módulo de ImageConversion
+                if (!UnityEngine.ImageConversion.LoadImage(texture, data))
                 {
                     ModLogger.Error($"❌ [ZombiesDeOP] Falló la carga de imagen: {texturePath}");
                     Destroy(texture);
@@ -119,6 +121,7 @@ namespace ZombiesDeOP.Systems
                         ModLogger.Info("🧩 [ZombiesDeOP] Mostrando icono HIDDEN");
                     }
                     break;
+
                 case "seen":
                     currentTexture = seenTexture;
                     isVisible = seenTexture != null;
@@ -131,6 +134,7 @@ namespace ZombiesDeOP.Systems
                         ModLogger.Info("🧩 [ZombiesDeOP] Mostrando icono SEEN");
                     }
                     break;
+
                 default:
                     HideTexture();
                     break;
@@ -154,7 +158,9 @@ namespace ZombiesDeOP.Systems
 
             const int size = 64;
             var rect = new Rect(50f, 50f, size, size);
-            GUI.DrawTexture(rect, currentTexture, ScaleMode.ScaleToFit, true);
+
+            // Prefijos explícitos para garantizar símbolos del IMGUI module
+            UnityEngine.GUI.DrawTexture(rect, currentTexture, UnityEngine.ScaleMode.ScaleToFit, true);
         }
 
         private void OnDestroy()
