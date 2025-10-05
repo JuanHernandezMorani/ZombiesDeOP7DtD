@@ -53,7 +53,10 @@ namespace ZombiesDeOP.Systems
 
             Instance = this;
 
-            _updateInterval = Mathf.Clamp(DEFAULT_INTERVAL, 0.1f, 1f);
+            float configuredInterval = ModSettings.PollingInterval;
+            _updateInterval = configuredInterval > 0f
+                ? Mathf.Clamp(configuredInterval, 0.1f, 1f)
+                : DEFAULT_INTERVAL;
             float configuredRadius = ModSettings.DetectionRange;
             _radius = configuredRadius > 0f ? Mathf.Clamp(configuredRadius, 5f, 60f) : DEFAULT_RADIUS;
 
