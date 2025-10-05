@@ -9,10 +9,11 @@ namespace ZombiesDeOP.Systems
         private static GameObject overlayObject;
         private static UIOverlayComponent overlayComponent;
         private static bool initialized;
+        private static bool overlayOwned;
 
         public static UIOverlayComponent OverlayComponent => overlayComponent;
 
-        public static void Initialize()
+        public static void Initialize(UIOverlayComponent existingComponent = null)
         {
             if (initialized)
             {
@@ -21,11 +22,22 @@ namespace ZombiesDeOP.Systems
 
             try
             {
-                overlayObject = new GameObject("ZombiesDeOP_UI");
+                if (existingComponent != null)
+                {
+                    overlayComponent = existingComponent;
+                    overlayObject = existingComponent.gameObject;
+                    overlayOwned = false;
+                }
+                else
+                {
+                    overlayObject = new GameObject("ZombiesDeOP_UI");
+                    overlayOwned = true;
+                    overlayComponent = overlayObject.AddComponent<UIOverlayComponent>();
+                }
+
+                overlayObject.name = "ZombiesDeOP_UI";
                 overlayObject.hideFlags = HideFlags.HideAndDontSave;
                 UnityEngine.Object.DontDestroyOnLoad(overlayObject);
-
-                overlayComponent = overlayObject.AddComponent<UIOverlayComponent>();
 
                 initialized = true;
                 ModLogger.Info("🖼️ [ZombiesDeOP] Overlay de visibilidad inicializado");
@@ -44,13 +56,14 @@ namespace ZombiesDeOP.Systems
                 return;
             }
 
-            if (overlayObject != null)
+            if (overlayOwned && overlayObject != null)
             {
                 UnityEngine.Object.Destroy(overlayObject);
-                overlayObject = null;
             }
 
+            overlayObject = null;
             overlayComponent = null;
+            overlayOwned = false;
             initialized = false;
             ModLogger.Info("🧹 [ZombiesDeOP] Overlay de visibilidad desmontado");
         }

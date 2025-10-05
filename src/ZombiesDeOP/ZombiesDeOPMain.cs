@@ -13,6 +13,8 @@ namespace ZombiesDeOP
         private const string HARMONY_ID = "com.juanhernandez.zombiesdeop.a21";
         private static HarmonyLib.Harmony harmonyInstance;
         private static bool overlayInitialized;
+        private static GameObject runtimeHost;
+        private static UIOverlayComponent overlayComponent;
 
         public void InitMod(Mod mod)
         {
@@ -22,18 +24,14 @@ namespace ZombiesDeOP
 
                 ModLogger.Info("🎯 [ZombiesDeOP] Iniciando mod para Alpha 21...");
 
-                if (harmonyInstance == null)
-                {
-                    harmonyInstance = new HarmonyLib.Harmony(HARMONY_ID);
-                    harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
-                }
-
                 ModSettings.Load();
                 War3zukCompatibility.ApplyCompatibility();
 
+                EnsureHarmony();
+                EnsureRuntimeHost();
+
                 DetectionSystem.Initialize();
                 HUDManager.Initialize();
-                InitializeOverlay();
                 BehaviorManager.Initialize();
 
                 ModLogger.Info("✅ [ZombiesDeOP] Mod cargado exitosamente");
@@ -55,29 +53,12 @@ namespace ZombiesDeOP
                 DetectionSystem.Shutdown();
                 ShutdownOverlay();
                 BehaviorManager.Shutdown();
+                ShutdownRuntimeHost();
                 ModLogger.Info("✅ [ZombiesDeOP] Mod descargado correctamente");
             }
             catch (Exception e)
             {
                 ModLogger.Error("❌ [ZombiesDeOP] Error en shutdown", e);
-            }
-        }
-
-        private static void InitializeOverlay()
-        {
-            if (overlayInitialized)
-            {
-                return;
-            }
-
-            try
-            {
-                VisibilityOverlaySystem.Initialize();
-                overlayInitialized = true;
-            }
-            catch (Exception e)
-            {
-                ModLogger.Error("❌ [ZombiesDeOP] Error al inicializar overlay", e);
             }
         }
 
@@ -99,6 +80,71 @@ namespace ZombiesDeOP
             finally
             {
                 overlayInitialized = false;
+                overlayComponent = null;
+            }
+        }
+
+        private static void EnsureHarmony()
+        {
+            if (harmonyInstance != null)
+            {
+                return;
+            }
+
+            harmonyInstance = new HarmonyLib.Harmony(HARMONY_ID);
+
+            try
+            {
+                harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+                ModLogger.Info("[ZombiesDeOP] PatchAll OK (v2.4)");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error("⚠️ [ZombiesDeOP] Error aplicando parches Harmony", ex);
+            }
+        }
+
+        private static void EnsureRuntimeHost()
+        {
+            if (runtimeHost != null)
+            {
+                return;
+            }
+
+            runtimeHost = new GameObject("ZombiesDeOP_Runtime");
+            runtimeHost.hideFlags = HideFlags.HideAndDontSave;
+            GameObject.DontDestroyOnLoad(runtimeHost);
+
+            overlayComponent = runtimeHost.GetComponent<UIOverlayComponent>() ?? runtimeHost.AddComponent<UIOverlayComponent>();
+            VisibilityOverlaySystem.Initialize(overlayComponent);
+            overlayInitialized = true;
+
+            if (runtimeHost.GetComponent<DetectionSystemRuntime>() == null)
+            {
+                runtimeHost.AddComponent<DetectionSystemRuntime>();
+            }
+
+            ModLogger.Info("🧠 [ZombiesDeOP] Runtime host inicializado para detección");
+        }
+
+        private static void ShutdownRuntimeHost()
+        {
+            if (runtimeHost == null)
+            {
+                return;
+            }
+
+            try
+            {
+                UnityEngine.Object.Destroy(runtimeHost);
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error("⚠️ [ZombiesDeOP] Error al destruir runtime host", ex);
+            }
+            finally
+            {
+                runtimeHost = null;
             }
         }
     }
