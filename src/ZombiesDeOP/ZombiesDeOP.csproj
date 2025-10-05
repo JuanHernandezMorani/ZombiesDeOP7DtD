@@ -9,9 +9,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <PlatformTarget>x64</PlatformTarget>
-    <DLLs>
-      <dll name="ZombiesDeOP.dll"/>
-    </DLLs>
   </PropertyGroup>
 
   <PropertyGroup>
