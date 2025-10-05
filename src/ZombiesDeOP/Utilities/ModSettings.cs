@@ -49,7 +49,7 @@ namespace ZombiesDeOP.Utilities
                 EnableHUD = GetBoolValue(root, "EnableHUD", true);
                 DebugMode = GetBoolValue(root, "DebugMode", false);
 
-                ModLogger.Log("✅ [ZombiesDeOP] Configuración cargada");
+                ModLogger.Info("✅ [ZombiesDeOP] Configuración cargada");
             }
             catch (Exception e)
             {
@@ -79,7 +79,7 @@ namespace ZombiesDeOP.Utilities
                 writer.WriteLine($"  <DebugMode>{DebugMode.ToString().ToLowerInvariant()}</DebugMode>");
                 writer.WriteLine("</ZombiesDeOP>");
 
-                ModLogger.Log("✅ [ZombiesDeOP] Configuración por defecto creada");
+                ModLogger.Info("✅ [ZombiesDeOP] Configuración por defecto creada");
             }
             catch (Exception e)
             {
@@ -109,7 +109,7 @@ namespace ZombiesDeOP.Utilities
             }
             catch (Exception e)
             {
-                ModLogger.Debug($"No se pudo leer el valor float '{key}': {e.Message}");
+                ModLogger.LogDebug($"No se pudo leer el valor float '{key}': {e.Message}");
             }
 
             return defaultValue;
@@ -132,7 +132,7 @@ namespace ZombiesDeOP.Utilities
             }
             catch (Exception e)
             {
-                ModLogger.Debug($"No se pudo leer el valor boolean '{key}': {e.Message}");
+                ModLogger.LogDebug($"No se pudo leer el valor boolean '{key}': {e.Message}");
             }
 
             return defaultValue;

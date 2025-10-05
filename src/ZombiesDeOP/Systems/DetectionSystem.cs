@@ -18,7 +18,7 @@ namespace ZombiesDeOP.Systems
             }
 
             initialized = true;
-            ModLogger.Log("🔍 [ZombiesDeOP] Sistema de detección inicializado");
+            ModLogger.Info("🔍 [ZombiesDeOP] Sistema de detección inicializado");
         }
 
         public static void Shutdown()
@@ -50,7 +50,7 @@ namespace ZombiesDeOP.Systems
             {
                 if (ActiveDetections.Add(enemy.entityId))
                 {
-                    ModLogger.Debug($"Detección registrada para {enemy.EntityName} a {distance:F1}m");
+                    ModLogger.LogDebug($"Detección registrada para {enemy.EntityName} a {distance:F1}m");
                     HUDManager.ReportDetection(enemy, true, distance);
                 }
             }
@@ -77,20 +77,18 @@ namespace ZombiesDeOP.Systems
                     return;
                 }
 
-                if (__instance.Senses == null)
-                {
-                    return;
-                }
+                float distanceToPlayer = __instance.GetDistance(player);
+                bool canSeePlayer = __instance.CanSee(player);
+                bool canHearPlayer = distanceToPlayer <= __instance.GetSeeDistance() * 0.75f;
+                bool canDetectPlayer = canSeePlayer || canHearPlayer;
 
-                bool canSeePlayer = __instance.Senses.CanSee(player) || __instance.Senses.CanHear(player);
-
-                if (canSeePlayer)
+                if (canDetectPlayer)
                 {
                     HandleZombieDetection(__instance);
                 }
                 else if (ActiveDetections.Remove(__instance.entityId))
                 {
-                    HUDManager.ReportDetection(__instance, false, __instance.GetDistance(player));
+                    HUDManager.ReportDetection(__instance, false, distanceToPlayer);
                 }
             }
         }

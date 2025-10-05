@@ -20,7 +20,7 @@ namespace ZombiesDeOP
             {
                 ModContext.Initialize(mod);
 
-                ModLogger.Log("🎯 [ZombiesDeOP] Iniciando mod para Alpha 21...");
+                ModLogger.Info("🎯 [ZombiesDeOP] Iniciando mod para Alpha 21...");
 
                 if (harmonyInstance == null)
                 {
@@ -36,11 +36,11 @@ namespace ZombiesDeOP
                 InitializeOverlay();
                 BehaviorManager.Initialize();
 
-                ModLogger.Log("✅ [ZombiesDeOP] Mod cargado exitosamente");
+                ModLogger.Info("✅ [ZombiesDeOP] Mod cargado exitosamente");
             }
             catch (Exception e)
             {
-                ModLogger.Error($"❌ [ZombiesDeOP] Error en inicialización: {e}");
+                ModLogger.Error("❌ [ZombiesDeOP] Error en inicialización", e);
             }
         }
 
@@ -48,17 +48,18 @@ namespace ZombiesDeOP
         {
             try
             {
-                harmonyInstance?.UnpatchAll(HARMONY_ID);
+                harmonyInstance?.UnpatchSelf();
+                ModLogger.Info("[ZombiesDeOP] Harmony patches desactivados correctamente.");
                 harmonyInstance = null;
                 HUDManager.Shutdown();
                 DetectionSystem.Shutdown();
                 ShutdownOverlay();
                 BehaviorManager.Shutdown();
-                ModLogger.Log("✅ [ZombiesDeOP] Mod descargado correctamente");
+                ModLogger.Info("✅ [ZombiesDeOP] Mod descargado correctamente");
             }
             catch (Exception e)
             {
-                ModLogger.Error($"❌ [ZombiesDeOP] Error en shutdown: {e}");
+                ModLogger.Error("❌ [ZombiesDeOP] Error en shutdown", e);
             }
         }
 
@@ -76,7 +77,7 @@ namespace ZombiesDeOP
             }
             catch (Exception e)
             {
-                ModLogger.Error($"❌ [ZombiesDeOP] Error al inicializar overlay: {e}");
+                ModLogger.Error("❌ [ZombiesDeOP] Error al inicializar overlay", e);
             }
         }
 
@@ -93,7 +94,7 @@ namespace ZombiesDeOP
             }
             catch (Exception e)
             {
-                ModLogger.Error($"❌ [ZombiesDeOP] Error al detener overlay: {e}");
+                ModLogger.Error("❌ [ZombiesDeOP] Error al detener overlay", e);
             }
             finally
             {

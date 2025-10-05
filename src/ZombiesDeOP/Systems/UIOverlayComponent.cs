@@ -18,12 +18,12 @@ namespace ZombiesDeOP.Systems
 
         private void Awake()
         {
-            ModLogger.Log("🧩 [ZombiesDeOP] UIOverlayComponent adjunto");
+            ModLogger.Info("🧩 [ZombiesDeOP] UIOverlayComponent adjunto");
         }
 
         private void Start()
         {
-            ModLogger.Log("🧩 [ZombiesDeOP] Inicializando UIOverlayComponent");
+            ModLogger.Info("🧩 [ZombiesDeOP] Inicializando UIOverlayComponent");
             LoadTextures();
             HideTexture();
         }
@@ -35,7 +35,7 @@ namespace ZombiesDeOP.Systems
 
             bool hiddenLoaded = hiddenTexture != null;
             bool seenLoaded = seenTexture != null;
-            ModLogger.Log($"🧩 [ZombiesDeOP] Texturas cargadas -> Hidden: {hiddenLoaded}, Seen: {seenLoaded}");
+            ModLogger.Info($"🧩 [ZombiesDeOP] Texturas cargadas -> Hidden: {hiddenLoaded}, Seen: {seenLoaded}");
         }
 
         private Texture2D LoadTexture(string imageName)
@@ -62,7 +62,7 @@ namespace ZombiesDeOP.Systems
 
                 if (string.IsNullOrEmpty(texturePath))
                 {
-                    ModLogger.Warning($"⚠️ [ZombiesDeOP] Textura no encontrada para {imageName}");
+                    ModLogger.Warn($"⚠️ [ZombiesDeOP] Textura no encontrada para {imageName}");
                     return null;
                 }
 
@@ -80,7 +80,7 @@ namespace ZombiesDeOP.Systems
                     return null;
                 }
 
-                ModLogger.Debug($"🧩 [ZombiesDeOP] Textura cargada: {texturePath}");
+                ModLogger.LogDebug($"🧩 [ZombiesDeOP] Textura cargada: {texturePath}");
                 return texture;
             }
             catch (Exception e)
@@ -103,7 +103,7 @@ namespace ZombiesDeOP.Systems
             }
 
             currentState = state;
-            ModLogger.Log($"🧩 [ZombiesDeOP] Cambiando estado de visibilidad a: {state}");
+            ModLogger.Info($"🧩 [ZombiesDeOP] Cambiando estado de visibilidad a: {state}");
 
             switch (state)
             {
@@ -112,11 +112,11 @@ namespace ZombiesDeOP.Systems
                     isVisible = hiddenTexture != null;
                     if (!isVisible)
                     {
-                        ModLogger.Warning("⚠️ [ZombiesDeOP] Textura HIDDEN no disponible");
+                        ModLogger.Warn("⚠️ [ZombiesDeOP] Textura HIDDEN no disponible");
                     }
                     else
                     {
-                        ModLogger.Log("🧩 [ZombiesDeOP] Mostrando icono HIDDEN");
+                        ModLogger.Info("🧩 [ZombiesDeOP] Mostrando icono HIDDEN");
                     }
                     break;
                 case "seen":
@@ -124,11 +124,11 @@ namespace ZombiesDeOP.Systems
                     isVisible = seenTexture != null;
                     if (!isVisible)
                     {
-                        ModLogger.Warning("⚠️ [ZombiesDeOP] Textura SEEN no disponible");
+                        ModLogger.Warn("⚠️ [ZombiesDeOP] Textura SEEN no disponible");
                     }
                     else
                     {
-                        ModLogger.Log("🧩 [ZombiesDeOP] Mostrando icono SEEN");
+                        ModLogger.Info("🧩 [ZombiesDeOP] Mostrando icono SEEN");
                     }
                     break;
                 default:
@@ -142,7 +142,7 @@ namespace ZombiesDeOP.Systems
             isVisible = false;
             currentTexture = null;
             currentState = "none";
-            ModLogger.Log("🧩 [ZombiesDeOP] Ocultando icono de visibilidad");
+            ModLogger.Info("🧩 [ZombiesDeOP] Ocultando icono de visibilidad");
         }
 
         private void OnGUI()
@@ -172,7 +172,7 @@ namespace ZombiesDeOP.Systems
             }
 
             currentTexture = null;
-            ModLogger.Debug("🧩 [ZombiesDeOP] UIOverlayComponent destruido");
+            ModLogger.LogDebug("🧩 [ZombiesDeOP] UIOverlayComponent destruido");
         }
     }
 }

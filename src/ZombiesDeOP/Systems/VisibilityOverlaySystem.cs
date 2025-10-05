@@ -28,7 +28,7 @@ namespace ZombiesDeOP.Systems
                 overlayComponent = overlayObject.AddComponent<UIOverlayComponent>();
 
                 initialized = true;
-                ModLogger.Log("🖼️ [ZombiesDeOP] Overlay de visibilidad inicializado");
+                ModLogger.Info("🖼️ [ZombiesDeOP] Overlay de visibilidad inicializado");
             }
             catch (Exception e)
             {
@@ -52,7 +52,7 @@ namespace ZombiesDeOP.Systems
 
             overlayComponent = null;
             initialized = false;
-            ModLogger.Log("🧹 [ZombiesDeOP] Overlay de visibilidad desmontado");
+            ModLogger.Info("🧹 [ZombiesDeOP] Overlay de visibilidad desmontado");
         }
     }
 }

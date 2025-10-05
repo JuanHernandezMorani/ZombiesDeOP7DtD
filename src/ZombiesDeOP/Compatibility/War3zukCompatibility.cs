@@ -18,11 +18,11 @@ namespace ZombiesDeOP.Compatibility
             {
                 ModSettings.DetectionRange *= 0.85f;
                 ModSettings.HearingRange *= 0.9f;
-                ModLogger.Log("🔧 [ZombiesDeOP] Aplicando compatibilidad War3zuk AIO");
+                ModLogger.Info("🔧 [ZombiesDeOP] Aplicando compatibilidad War3zuk AIO");
             }
             else
             {
-                ModLogger.Debug("War3zuk AIO no detectado, usando configuración estándar");
+                ModLogger.LogDebug("War3zuk AIO no detectado, usando configuración estándar");
             }
         }
     }
