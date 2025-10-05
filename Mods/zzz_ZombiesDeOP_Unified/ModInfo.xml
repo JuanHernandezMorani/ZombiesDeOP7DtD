@@ -1,8 +1,0 @@
-<xml>
-	<Name value="zzz_ZombiesDeOP_Unified"/>
-	<DisplayName value="Zombies DeOP"/>
-	<Version value="1.0"/>
-	<Description value="Better detection system, with small changes in biomes, climate, and more."/>
-	<Author value="JuanHernandezMorani"/>
-  <LoadAfter value="War3zuk_AIO_Overhaul"/>
-</xml>

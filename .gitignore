@@ -41,6 +41,7 @@
 ExportedObj/
 .consulo/
 *.csproj
+!src/ZombiesDeOP/ZombiesDeOP.csproj
 *.unityproj
 *.sln
 *.suo
@@ -120,6 +121,7 @@ InitTestScene*.unity*
 *.7z
 *.rar
 *.dll
+!Mods/zzzz_ZombiesDeOP_Unified/ZombiesDeOP.dll
 *.so
 *.dylib
 *.exe
