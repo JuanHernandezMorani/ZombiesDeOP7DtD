@@ -26,6 +26,7 @@ namespace ZombiesDeOP
 
                 ModSettings.Load();
                 ApplyCompatibilitySafe();
+                LogRuntimeConfiguration();
                 InitializeHarmonySafe();
                 CreateRuntimeSystems();
                 InitializeGameplaySystems();
@@ -101,6 +102,20 @@ namespace ZombiesDeOP
             catch (Exception e)
             {
                 ModLogger.Warn($"⚠️ [ZombiesDeOP] Error aplicando compatibilidad War3zuk: {e.Message}");
+            }
+        }
+
+        private static void LogRuntimeConfiguration()
+        {
+            try
+            {
+                string hudState = ModSettings.EnableHUD ? "ON" : "OFF";
+                ModLogger.Info($"🔧 [ZombiesDeOP] Configuración cargada -> Detección: {ModSettings.DetectionRange:F1}m, HUD: {hudState}, Intervalo: {ModSettings.PollingInterval:F2}s");
+                ModLogger.Info($"🔧 [ZombiesDeOP] War3zuk detectado: {War3zukCompatibility.IsWar3zukInstalled}");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Warn($"⚠️ [ZombiesDeOP] No se pudo registrar la configuración inicial: {ex.Message}");
             }
         }
 

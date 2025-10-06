@@ -37,16 +37,6 @@ namespace ZombiesDeOP.Systems
             runtimeObject.hideFlags = HideFlags.HideAndDontSave;
             runtimeObject.AddComponent<HudRuntime>();
 
-            // Estilo por defecto (blanco, semi-negrita, tamaño legible)
-            _labelStyle = new GUIStyle(GUI.skin.label)
-            {
-                fontSize = 18,
-                fontStyle = UnityEngine.FontStyle.Bold,
-                alignment = UnityEngine.TextAnchor.UpperLeft,
-                wordWrap = false
-            };
-            _labelStyle.normal.textColor = Color.white;
-
             initialized = true;
             displayTimer = 0f;
             ModLogger.Info("🖥️ [ZombiesDeOP] HUD inicializado");
@@ -63,6 +53,7 @@ namespace ZombiesDeOP.Systems
                 runtimeObject = null;
             }
 
+            _labelStyle = null;
             initialized = false;
         }
 
@@ -94,6 +85,7 @@ namespace ZombiesDeOP.Systems
             if (!initialized) return;
             if (Messages.Count == 0) return;
 
+            EnsureStyle();
             string message = Messages.Peek();
 
             var oldColor = GUI.color;
@@ -102,6 +94,24 @@ namespace ZombiesDeOP.Systems
             GUI.color = oldColor;
 
             GUI.Label(_labelRect, message, _labelStyle);
+        }
+
+        private static void EnsureStyle()
+        {
+            if (_labelStyle != null)
+            {
+                return;
+            }
+
+            var baseStyle = GUI.skin != null ? GUI.skin.label : GUIStyle.none;
+            _labelStyle = new GUIStyle(baseStyle)
+            {
+                fontSize = 18,
+                fontStyle = UnityEngine.FontStyle.Bold,
+                alignment = UnityEngine.TextAnchor.UpperLeft,
+                wordWrap = false
+            };
+            _labelStyle.normal.textColor = Color.white;
         }
     }
 }
