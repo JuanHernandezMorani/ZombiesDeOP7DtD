@@ -14,8 +14,15 @@ namespace ZombiesDeOP.Harmony
         private static readonly string[] CandidateMethods =
         {
             "OnUpdateLive",
+            "OnUpdate",
             "Update",
-            "OnUpdate"
+            "UpdateAI",
+            "AIUpdate",
+            "UpdateAITasks",
+            "UpdateTasks",
+            "UpdateTarget",
+            "Tick",
+            "TickAI"
         };
 
         private static bool _targetLogged;
@@ -57,6 +64,18 @@ namespace ZombiesDeOP.Harmony
                 return;
             }
 
+            if (ModSettings.DebugMode)
+            {
+                try
+                {
+                    ModLogger.LogDebug($"EnemyDetectionPatch.Postfix -> {enemy.EntityName} ({enemy.entityId})");
+                }
+                catch
+                {
+                    // Ignorar cualquier excepción de propiedades durante depuración
+                }
+            }
+
             DetectionSystemRuntime.NotifyHarmonyTick(enemy);
         }
 
@@ -65,8 +84,39 @@ namespace ZombiesDeOP.Harmony
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
             return type
                 .GetMethods(flags)
-                .Where(m => CandidateMethods.Contains(m.Name))
-                .Where(m => m.ReturnType == typeof(void) && m.GetParameters().Length == 0);
+                .Where(IsSupportedMethod);
+        }
+
+        private static bool IsSupportedMethod(MethodInfo method)
+        {
+            if (method == null)
+            {
+                return false;
+            }
+
+            if (method.ReturnType != typeof(void) || method.GetParameters().Length != 0)
+            {
+                return false;
+            }
+
+            var name = method.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            foreach (var candidate in CandidateMethods)
+            {
+                if (string.Equals(name, candidate, StringComparison.OrdinalIgnoreCase) ||
+                    name.StartsWith(candidate, StringComparison.OrdinalIgnoreCase) ||
+                    name.EndsWith(candidate, StringComparison.OrdinalIgnoreCase) ||
+                    name.Contains(candidate, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

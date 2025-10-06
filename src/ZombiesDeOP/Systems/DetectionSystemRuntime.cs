@@ -14,15 +14,18 @@ namespace ZombiesDeOP.Systems
         private const float DEFAULT_RADIUS = 30f;
         private const float WORLD_LOG_COOLDOWN = 5f;
 
-        private static readonly MethodInfo EntitiesInBoundsWithBuffer = AccessTools.Method(
-            typeof(World),
-            "GetEntitiesInBounds",
-            new[] { typeof(Type), typeof(Bounds), typeof(List<Entity>) });
+        private static readonly MethodInfo EntitiesInBoundsWithBuffer = ResolveEntitiesInBounds(new[]
+        {
+            typeof(Type),
+            typeof(Bounds),
+            typeof(List<Entity>)
+        });
 
-        private static readonly MethodInfo EntitiesInBoundsReturningList = AccessTools.Method(
-            typeof(World),
-            "GetEntitiesInBounds",
-            new[] { typeof(Type), typeof(Bounds) });
+        private static readonly MethodInfo EntitiesInBoundsReturningList = ResolveEntitiesInBounds(new[]
+        {
+            typeof(Type),
+            typeof(Bounds)
+        });
 
         private static readonly Type EntityFilterType = typeof(EntityAlive);
 
@@ -214,6 +217,106 @@ namespace ZombiesDeOP.Systems
             }
 
             return false;
+        }
+
+        private static MethodInfo ResolveEntitiesInBounds(Type[] signature)
+        {
+            MethodInfo direct = AccessTools.Method(typeof(World), "GetEntitiesInBounds", signature);
+            if (direct != null)
+            {
+                return direct;
+            }
+
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            foreach (var method in typeof(World).GetMethods(flags))
+            {
+                if (!string.Equals(method.Name, "GetEntitiesInBounds", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                if (ParametersCompatible(method.GetParameters(), signature))
+                {
+                    return method;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool ParametersCompatible(IReadOnlyList<ParameterInfo> parameters, IReadOnlyList<Type> desired)
+        {
+            if (parameters.Count != desired.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                var actualType = parameters[i].ParameterType;
+                var desiredType = desired[i];
+
+                if (desiredType == null)
+                {
+                    continue;
+                }
+
+                if (actualType == desiredType)
+                {
+                    continue;
+                }
+
+                if (desiredType.IsAssignableFrom(actualType) || actualType.IsAssignableFrom(desiredType))
+                {
+                    continue;
+                }
+
+                if (desiredType == typeof(List<Entity>) && IsEntityCollection(actualType))
+                {
+                    continue;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsEntityCollection(Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            if (type.IsArray)
+            {
+                return typeof(Entity).IsAssignableFrom(type.GetElementType());
+            }
+
+            if (type.IsGenericType)
+            {
+                var genericArguments = type.GetGenericArguments();
+                if (genericArguments.Length == 1 && typeof(Entity).IsAssignableFrom(genericArguments[0]))
+                {
+                    var genericDefinition = type.GetGenericTypeDefinition();
+                    if (genericDefinition == typeof(List<>) ||
+                        genericDefinition == typeof(IList<>) ||
+                        genericDefinition == typeof(ICollection<>) ||
+                        genericDefinition == typeof(IEnumerable<>))
+                    {
+                        return true;
+                    }
+
+                    if (genericDefinition.Name.Contains("List", StringComparison.OrdinalIgnoreCase) ||
+                        genericDefinition.Name.Contains("Collection", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return typeof(IList).IsAssignableFrom(type) || typeof(ICollection).IsAssignableFrom(type);
         }
 
         private void RemoveNullEntities()

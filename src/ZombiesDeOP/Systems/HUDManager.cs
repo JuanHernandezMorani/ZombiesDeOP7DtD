@@ -9,7 +9,7 @@ namespace ZombiesDeOP.Systems
         private sealed class HudRuntime : MonoBehaviour
         {
             private void Update() => OnGameUpdate();
-            private void OnGUI() => OnGameGUI();
+            private void OnGUI() => HUDManager.OnGUI();
         }
 
         private static readonly Queue<string> Messages = new();
@@ -80,7 +80,7 @@ namespace ZombiesDeOP.Systems
             }
         }
 
-        private static void OnGameGUI()
+        public static void OnGUI()
         {
             if (!initialized) return;
             if (Messages.Count == 0) return;
