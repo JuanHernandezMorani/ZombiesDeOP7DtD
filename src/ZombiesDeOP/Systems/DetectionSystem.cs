@@ -279,18 +279,15 @@ namespace ZombiesDeOP.Systems
 
         private static class DetectionHelpers
         {
-            private static readonly FieldInfo PlayerCrouchField;
-            private static readonly FieldInfo PlayerLegacyCrouchField;
-            private static readonly PropertyInfo PlayerCrouchProperty;
-            private static readonly PropertyInfo PlayerLegacyCrouchProperty;
+            private static readonly List<Func<EntityPlayerLocal, bool?>> CrouchResolvers = new();
             private static readonly MethodInfo CanSeeMethod;
 
             static DetectionHelpers()
             {
-                PlayerCrouchProperty = AccessTools.Property(typeof(EntityPlayerLocal), "IsCrouching");
-                PlayerLegacyCrouchProperty = AccessTools.Property(typeof(EntityPlayerLocal), "Crouching");
-                PlayerCrouchField = AccessTools.Field(typeof(EntityPlayerLocal), "isCrouching");
-                PlayerLegacyCrouchField = AccessTools.Field(typeof(EntityPlayerLocal), "Crouching");
+                RegisterPropertyGetter("IsCrouching");
+                RegisterPropertyGetter("Crouching");
+                RegisterFieldGetter("isCrouching");
+                RegisterFieldGetter("crouching");
 
                 var enemyType = typeof(EntityEnemy);
                 var candidateParams = new[] { typeof(EntityAlive) };
@@ -310,39 +307,12 @@ namespace ZombiesDeOP.Systems
 
                 try
                 {
-                    if (PlayerCrouchProperty != null)
+                    foreach (var resolver in CrouchResolvers)
                     {
-                        object value = PlayerCrouchProperty.GetValue(player, null);
-                        if (value is bool crouching)
+                        bool? crouching = resolver(player);
+                        if (crouching.HasValue)
                         {
-                            return crouching;
-                        }
-                    }
-
-                    if (PlayerLegacyCrouchProperty != null)
-                    {
-                        object value = PlayerLegacyCrouchProperty.GetValue(player, null);
-                        if (value is bool crouching)
-                        {
-                            return crouching;
-                        }
-                    }
-
-                    if (PlayerCrouchField != null)
-                    {
-                        object value = PlayerCrouchField.GetValue(player);
-                        if (value is bool crouching)
-                        {
-                            return crouching;
-                        }
-                    }
-
-                    if (PlayerLegacyCrouchField != null)
-                    {
-                        object value = PlayerLegacyCrouchField.GetValue(player);
-                        if (value is bool crouching)
-                        {
-                            return crouching;
+                            return crouching.Value;
                         }
                     }
                 }
@@ -428,6 +398,52 @@ namespace ZombiesDeOP.Systems
                 }
 
                 return basePosition + Vector3.up * eyeHeight;
+            }
+
+            private static void RegisterPropertyGetter(string name)
+            {
+                var property = AccessTools.Property(typeof(EntityPlayerLocal), name);
+                if (property == null || property.PropertyType != typeof(bool))
+                {
+                    return;
+                }
+
+                var getter = property.GetGetMethod(true);
+                if (getter == null)
+                {
+                    return;
+                }
+
+                CrouchResolvers.Add(player =>
+                {
+                    if (player == null)
+                    {
+                        return null;
+                    }
+
+                    object value = getter.Invoke(player, null);
+                    return value is bool crouching ? crouching : (bool?)null;
+                });
+            }
+
+            private static void RegisterFieldGetter(string name)
+            {
+                var field = AccessTools.Field(typeof(EntityPlayerLocal), name);
+                if (field == null || field.FieldType != typeof(bool))
+                {
+                    return;
+                }
+
+                CrouchResolvers.Add(player =>
+                {
+                    if (player == null)
+                    {
+                        return null;
+                    }
+
+                    object value = field.GetValue(player);
+                    return value is bool crouching ? crouching : (bool?)null;
+                });
             }
         }
     }

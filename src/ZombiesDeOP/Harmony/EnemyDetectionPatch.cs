@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using ZombiesDeOP.Systems;
@@ -13,20 +14,17 @@ namespace ZombiesDeOP.Harmony
         private static readonly string[] CandidateMethods =
         {
             "OnUpdateLive",
-            "OnUpdate",
-            "AIUpdate",
-            "UpdateTasks",
             "Update",
-            "UpdateTarget"
+            "OnUpdate"
         };
 
         private static bool _targetLogged;
 
         public static IEnumerable<MethodBase> TargetMethods()
         {
-            var enemyType = AccessTools.TypeByName("EntityEnemy");
-            var aliveType = AccessTools.TypeByName("EntityAlive");
-            int matches = 0;
+            var enemyType = AccessTools.TypeByName("EntityEnemy") ?? typeof(EntityEnemy);
+            var aliveType = AccessTools.TypeByName("EntityAlive") ?? typeof(EntityAlive);
+            var discovered = new HashSet<MethodBase>();
 
             foreach (var type in new[] { enemyType, aliveType })
             {
@@ -35,26 +33,17 @@ namespace ZombiesDeOP.Harmony
                     continue;
                 }
 
-                foreach (string methodName in CandidateMethods)
+                foreach (var method in GetCandidateMethods(type))
                 {
-                    var method = AccessTools.Method(type, methodName, Type.EmptyTypes);
-                    if (method == null)
+                    if (discovered.Add(method))
                     {
-                        continue;
+                        ModLogger.Info($"🔧 [ZombiesDeOP] Harmony target detectado: {method.DeclaringType?.FullName}.{method.Name}()");
+                        yield return method;
                     }
-
-                    if (method.ReturnType != typeof(void) || method.GetParameters().Length != 0)
-                    {
-                        continue;
-                    }
-
-                    matches++;
-                    ModLogger.Info($"🔧 [ZombiesDeOP] Harmony target detectado: {type.FullName}.{methodName}()");
-                    yield return method;
                 }
             }
 
-            if (matches == 0 && !_targetLogged)
+            if (discovered.Count == 0 && !_targetLogged)
             {
                 _targetLogged = true;
                 ModLogger.Warn("⚠️ [ZombiesDeOP] EnemyDetectionPatch: no suitable targets found; el sistema usará modo polling.");
@@ -69,6 +58,15 @@ namespace ZombiesDeOP.Harmony
             }
 
             DetectionSystemRuntime.NotifyHarmonyTick(enemy);
+        }
+
+        private static IEnumerable<MethodInfo> GetCandidateMethods(Type type)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+            return type
+                .GetMethods(flags)
+                .Where(m => CandidateMethods.Contains(m.Name))
+                .Where(m => m.ReturnType == typeof(void) && m.GetParameters().Length == 0);
         }
     }
 }

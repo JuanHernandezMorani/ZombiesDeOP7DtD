@@ -24,6 +24,8 @@ namespace ZombiesDeOP.Systems
             "GetEntitiesInBounds",
             new[] { typeof(Type), typeof(Bounds) });
 
+        private static readonly Type EntityFilterType = typeof(EntityAlive);
+
         private readonly List<Entity> _entityBuffer = new();
         private readonly List<EntityEnemy> _enemyBuffer = new();
 
@@ -165,28 +167,44 @@ namespace ZombiesDeOP.Systems
             {
                 if (EntitiesInBoundsWithBuffer != null)
                 {
-                    object[] args = { null, bounds, _entityBuffer };
-                    EntitiesInBoundsWithBuffer.Invoke(world, args);
-                    LogCollectionMethod($"{EntitiesInBoundsWithBuffer.DeclaringType?.Name}.{EntitiesInBoundsWithBuffer.Name}(Type, Bounds, List<Entity>)");
-                    return true;
+                    try
+                    {
+                        object[] args = { EntityFilterType, bounds, _entityBuffer };
+                        EntitiesInBoundsWithBuffer.Invoke(world, args);
+                        RemoveNullEntities();
+                        LogCollectionMethod($"{EntitiesInBoundsWithBuffer.DeclaringType?.Name}.{EntitiesInBoundsWithBuffer.Name}(Type, Bounds, List<Entity>)");
+                        return true;
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        ModLogger.Error("❌ [ZombiesDeOP] Reflection invocation error (buffer overload)", ex.InnerException ?? ex);
+                    }
                 }
 
                 if (EntitiesInBoundsReturningList != null)
                 {
-                    object[] args = { null, bounds };
-                    object result = EntitiesInBoundsReturningList.Invoke(world, args);
-                    if (result is IEnumerable enumerable)
+                    try
                     {
-                        foreach (var obj in enumerable)
+                        object[] args = { EntityFilterType, bounds };
+                        object result = EntitiesInBoundsReturningList.Invoke(world, args);
+                        if (result is IEnumerable enumerable)
                         {
-                            if (obj is Entity entity && entity != null)
+                            foreach (var obj in enumerable)
                             {
-                                _entityBuffer.Add(entity);
+                                if (obj is Entity entity && entity != null)
+                                {
+                                    _entityBuffer.Add(entity);
+                                }
                             }
-                        }
 
-                        LogCollectionMethod($"{EntitiesInBoundsReturningList.DeclaringType?.Name}.{EntitiesInBoundsReturningList.Name}(Type, Bounds)");
-                        return true;
+                            RemoveNullEntities();
+                            LogCollectionMethod($"{EntitiesInBoundsReturningList.DeclaringType?.Name}.{EntitiesInBoundsReturningList.Name}(Type, Bounds)");
+                            return true;
+                        }
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        ModLogger.Error("❌ [ZombiesDeOP] Reflection invocation error (list overload)", ex.InnerException ?? ex);
                     }
                 }
             }
@@ -196,6 +214,22 @@ namespace ZombiesDeOP.Systems
             }
 
             return false;
+        }
+
+        private void RemoveNullEntities()
+        {
+            if (_entityBuffer.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = _entityBuffer.Count - 1; i >= 0; i--)
+            {
+                if (_entityBuffer[i] == null)
+                {
+                    _entityBuffer.RemoveAt(i);
+                }
+            }
         }
 
         private static void LogCollectionMethod(string signature)
