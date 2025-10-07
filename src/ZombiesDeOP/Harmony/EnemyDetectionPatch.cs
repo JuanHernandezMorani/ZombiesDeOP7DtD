@@ -59,7 +59,12 @@ namespace ZombiesDeOP.Harmony
 
         public static void Postfix(object __instance)
         {
-            if (__instance is not EntityEnemy enemy)
+            if (__instance is not EntityAlive entity)
+            {
+                return;
+            }
+
+            if (!BehaviorManager.IsHostileEntity(entity))
             {
                 return;
             }
@@ -68,7 +73,7 @@ namespace ZombiesDeOP.Harmony
             {
                 try
                 {
-                    ModLogger.LogDebug($"EnemyDetectionPatch.Postfix -> {enemy.EntityName} ({enemy.entityId})");
+                    ModLogger.LogDebug($"EnemyDetectionPatch.Postfix -> {entity.EntityName} ({entity.entityId})");
                 }
                 catch
                 {
@@ -76,7 +81,7 @@ namespace ZombiesDeOP.Harmony
                 }
             }
 
-            DetectionSystemRuntime.NotifyHarmonyTick(enemy);
+            DetectionSystemRuntime.NotifyHarmonyTick(entity);
         }
 
         private static IEnumerable<MethodInfo> GetCandidateMethods(Type type)
