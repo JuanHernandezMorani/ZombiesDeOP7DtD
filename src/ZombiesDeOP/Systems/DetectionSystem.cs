@@ -40,7 +40,7 @@ namespace ZombiesDeOP.Systems
             public bool IsValid => Enemy != null && Enemy.IsAlive();
         }
 
-        private static readonly Dictionary<int, EnemySnapshot> EnemyObservations = new();
+        private static readonly Dictionary<int, EnemySnapshot> EnemyObservations = new Dictionary<int, EnemySnapshot>();
         private const float HUD_COOLDOWN = 1.25f;
         private const float SNAPSHOT_TTL = 1.5f;
 
@@ -279,7 +279,7 @@ namespace ZombiesDeOP.Systems
 
         private static class DetectionHelpers
         {
-            private static readonly List<Func<EntityPlayerLocal, bool?>> CrouchResolvers = new();
+            private static readonly List<Func<EntityPlayerLocal, bool?>> CrouchResolvers = new List<Func<EntityPlayerLocal, bool?>>();
             private static readonly MethodInfo CanSeeMethod;
 
             static DetectionHelpers()

@@ -29,8 +29,8 @@ namespace ZombiesDeOP.Systems
 
         private static readonly Type EntityFilterType = typeof(EntityAlive);
 
-        private readonly List<Entity> _entityBuffer = new();
-        private readonly List<EntityEnemy> _enemyBuffer = new();
+        private readonly List<Entity> _entityBuffer = new List<Entity>();
+        private readonly List<EntityEnemy> _enemyBuffer = new List<EntityEnemy>();
 
         private float _lastTickTime;
         private float _lastWorldWarning;

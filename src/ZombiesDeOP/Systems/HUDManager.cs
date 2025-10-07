@@ -12,7 +12,7 @@ namespace ZombiesDeOP.Systems
             private void OnGUI() => HUDManager.OnGUI();
         }
 
-        private static readonly Queue<string> Messages = new();
+        private static readonly Queue<string> Messages = new Queue<string>();
         private static bool initialized;
         private static float displayTimer;
         private static GameObject runtimeObject;
