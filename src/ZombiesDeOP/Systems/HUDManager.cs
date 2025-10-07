@@ -57,7 +57,7 @@ namespace ZombiesDeOP.Systems
             initialized = false;
         }
 
-        public static void ReportDetection(EntityEnemy enemy, bool detected, float distance)
+        public static void ReportDetection(EntityAlive enemy, bool detected, float distance)
         {
             if (!initialized || enemy == null) return;
 

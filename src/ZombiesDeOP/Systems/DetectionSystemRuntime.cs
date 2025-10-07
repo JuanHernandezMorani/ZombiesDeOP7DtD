@@ -14,14 +14,14 @@ namespace ZombiesDeOP.Systems
         private const float DEFAULT_RADIUS = 30f;
         private const float WORLD_LOG_COOLDOWN = 5f;
 
-        private static readonly MethodInfo EntitiesInBoundsWithBuffer = ResolveEntitiesInBounds(new[]
+        private static readonly MethodInfo _resolveEntitiesInBounds = ResolveEntitiesInBounds(new[]
         {
             typeof(Type),
             typeof(Bounds),
             typeof(List<Entity>)
         });
 
-        private static readonly MethodInfo EntitiesInBoundsReturningList = ResolveEntitiesInBounds(new[]
+        private static readonly MethodInfo _legacyEntitiesInBounds = ResolveEntitiesInBounds(new[]
         {
             typeof(Type),
             typeof(Bounds)
@@ -30,7 +30,7 @@ namespace ZombiesDeOP.Systems
         private static readonly Type EntityFilterType = typeof(EntityAlive);
 
         private readonly List<Entity> _entityBuffer = new List<Entity>();
-        private readonly List<EntityEnemy> _enemyBuffer = new List<EntityEnemy>();
+        private readonly List<EntityAlive> _enemyBuffer = new List<EntityAlive>();
 
         private float _lastTickTime;
         private float _lastWorldWarning;
@@ -152,10 +152,22 @@ namespace ZombiesDeOP.Systems
 
             foreach (var entity in _entityBuffer)
             {
-                if (entity is EntityEnemy enemy && enemy.IsAlive())
+                if (entity is not EntityAlive alive)
                 {
-                    _enemyBuffer.Add(enemy);
+                    continue;
                 }
+
+                if (!alive.IsAlive())
+                {
+                    continue;
+                }
+
+                if (!BehaviorManager.IsHostileEntity(alive))
+                {
+                    continue;
+                }
+
+                _enemyBuffer.Add(alive);
             }
         }
 
@@ -168,14 +180,15 @@ namespace ZombiesDeOP.Systems
 
             try
             {
-                if (EntitiesInBoundsWithBuffer != null)
+                if (_resolveEntitiesInBounds != null)
                 {
                     try
                     {
+                        _entityBuffer.Clear();
                         object[] args = { EntityFilterType, bounds, _entityBuffer };
-                        EntitiesInBoundsWithBuffer.Invoke(world, args);
+                        _resolveEntitiesInBounds.Invoke(world, args);
                         RemoveNullEntities();
-                        LogCollectionMethod($"{EntitiesInBoundsWithBuffer.DeclaringType?.Name}.{EntitiesInBoundsWithBuffer.Name}(Type, Bounds, List<Entity>)");
+                        LogCollectionMethod($"{_resolveEntitiesInBounds.DeclaringType?.Name}.{_resolveEntitiesInBounds.Name}(Type, Bounds, List<Entity>)");
                         return true;
                     }
                     catch (TargetInvocationException ex)
@@ -184,12 +197,12 @@ namespace ZombiesDeOP.Systems
                     }
                 }
 
-                if (EntitiesInBoundsReturningList != null)
+                if (_legacyEntitiesInBounds != null)
                 {
                     try
                     {
                         object[] args = { EntityFilterType, bounds };
-                        object result = EntitiesInBoundsReturningList.Invoke(world, args);
+                        object result = _legacyEntitiesInBounds.Invoke(world, args);
                         if (result is IEnumerable enumerable)
                         {
                             foreach (var obj in enumerable)
@@ -201,7 +214,7 @@ namespace ZombiesDeOP.Systems
                             }
 
                             RemoveNullEntities();
-                            LogCollectionMethod($"{EntitiesInBoundsReturningList.DeclaringType?.Name}.{EntitiesInBoundsReturningList.Name}(Type, Bounds)");
+                            LogCollectionMethod($"{_legacyEntitiesInBounds.DeclaringType?.Name}.{_legacyEntitiesInBounds.Name}(Type, Bounds)");
                             return true;
                         }
                     }
@@ -368,7 +381,7 @@ namespace ZombiesDeOP.Systems
             return _overlay;
         }
 
-        internal static void NotifyHarmonyTick(EntityEnemy enemy)
+        internal static void NotifyHarmonyTick(EntityAlive enemy)
         {
             if (enemy == null)
             {
@@ -399,7 +412,7 @@ namespace ZombiesDeOP.Systems
             DetectionSystem.ProcessHarmonyObservation(player, enemy, radius, overlay);
         }
 
-        private void ProcessHarmonyObservation(EntityEnemy enemy)
+        private void ProcessHarmonyObservation(EntityAlive enemy)
         {
             var world = GameManager.Instance?.World;
             var player = world?.GetPrimaryPlayer() as EntityPlayerLocal;

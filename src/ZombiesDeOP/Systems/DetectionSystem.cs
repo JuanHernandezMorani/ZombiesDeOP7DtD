@@ -19,7 +19,7 @@ namespace ZombiesDeOP.Systems
     {
         private sealed class EnemySnapshot
         {
-            public EnemySnapshot(EntityEnemy enemy, EntityPlayerLocal player, float radius)
+            public EnemySnapshot(EntityAlive enemy, EntityPlayerLocal player, float radius)
             {
                 Enemy = enemy;
                 EntityId = enemy?.entityId ?? -1;
@@ -31,7 +31,7 @@ namespace ZombiesDeOP.Systems
                 HiddenCandidate = !Seen && Distance <= radius;
             }
 
-            public EntityEnemy Enemy { get; }
+            public EntityAlive Enemy { get; }
             public int EntityId { get; }
             public float Timestamp { get; }
             public float Distance { get; }
@@ -75,7 +75,7 @@ namespace ZombiesDeOP.Systems
             lastStateChangeTime = 0f;
         }
 
-        internal static void ProcessRuntimeTick(EntityPlayerLocal player, IList<EntityEnemy> enemies, float radius, UIOverlayComponent overlay)
+        internal static void ProcessRuntimeTick(EntityPlayerLocal player, IList<EntityAlive> enemies, float radius, UIOverlayComponent overlay)
         {
             if (!initialized || player == null)
             {
@@ -85,8 +85,8 @@ namespace ZombiesDeOP.Systems
             bool crouching = DetectionHelpers.ResolveCrouchState(player);
             bool seen = false;
             bool hiddenCandidate = false;
-            EntityEnemy seenEnemy = null;
-            EntityEnemy hiddenEnemy = null;
+            EntityAlive seenEnemy = null;
+            EntityAlive hiddenEnemy = null;
             float seenDistance = float.MaxValue;
             float hiddenDistance = float.MaxValue;
             int evaluated = 0;
@@ -135,7 +135,7 @@ namespace ZombiesDeOP.Systems
             ApplyState(state, referenceEnemy, referenceDistance, evaluated, overlay);
         }
 
-        internal static void ProcessHarmonyObservation(EntityPlayerLocal player, EntityEnemy enemy, float radius, UIOverlayComponent overlay)
+        internal static void ProcessHarmonyObservation(EntityPlayerLocal player, EntityAlive enemy, float radius, UIOverlayComponent overlay)
         {
             if (!initialized || player == null || enemy == null)
             {
@@ -148,8 +148,8 @@ namespace ZombiesDeOP.Systems
             bool crouching = DetectionHelpers.ResolveCrouchState(player);
             bool anySeen = false;
             bool hiddenCandidate = false;
-            EntityEnemy seenEnemy = null;
-            EntityEnemy hiddenEnemy = null;
+            EntityAlive seenEnemy = null;
+            EntityAlive hiddenEnemy = null;
             float seenDistance = float.MaxValue;
             float hiddenDistance = float.MaxValue;
             int evaluated = 0;
@@ -203,7 +203,7 @@ namespace ZombiesDeOP.Systems
             ModLogger.Info("👁️ [ZombiesDeOP] Estado de detección -> NONE (reinicio por falta de datos)");
         }
 
-        private static void ApplyState(DetectionState state, EntityEnemy enemy, float distance, int evaluated, UIOverlayComponent overlay)
+        private static void ApplyState(DetectionState state, EntityAlive enemy, float distance, int evaluated, UIOverlayComponent overlay)
         {
             if (!initialized)
             {
@@ -240,7 +240,7 @@ namespace ZombiesDeOP.Systems
             TryReportHud(state, enemy, distance);
         }
 
-        private static void TryReportHud(DetectionState state, EntityEnemy enemy, float distance)
+        private static void TryReportHud(DetectionState state, EntityAlive enemy, float distance)
         {
             if (enemy == null)
             {
@@ -289,7 +289,7 @@ namespace ZombiesDeOP.Systems
                 RegisterFieldGetter("isCrouching");
                 RegisterFieldGetter("crouching");
 
-                var enemyType = typeof(EntityEnemy);
+                var enemyType = typeof(EntityAlive);
                 var candidateParams = new[] { typeof(EntityAlive) };
                 CanSeeMethod = AccessTools.Method(enemyType, "CanSee", candidateParams);
                 if (CanSeeMethod == null)
@@ -324,7 +324,7 @@ namespace ZombiesDeOP.Systems
                 return false;
             }
 
-            public static bool TryCanSee(EntityEnemy enemy, EntityPlayerLocal player)
+            public static bool TryCanSee(EntityAlive enemy, EntityPlayerLocal player)
             {
                 if (enemy == null || player == null)
                 {
@@ -350,7 +350,7 @@ namespace ZombiesDeOP.Systems
                 return EstimateLineOfSight(enemy, player);
             }
 
-            private static bool EstimateLineOfSight(EntityEnemy enemy, EntityPlayerLocal player)
+            private static bool EstimateLineOfSight(EntityAlive enemy, EntityPlayerLocal player)
             {
                 Vector3 enemyEye = GetEyePosition(enemy);
                 Vector3 playerEye = GetEyePosition(player);
