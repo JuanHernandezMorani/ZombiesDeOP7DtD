@@ -321,8 +321,8 @@ namespace ZombiesDeOP.Systems
                         return true;
                     }
 
-                    if (genericDefinition.Name.Contains("List", StringComparison.OrdinalIgnoreCase) ||
-                        genericDefinition.Name.Contains("Collection", StringComparison.OrdinalIgnoreCase))
+                    if (genericDefinition.Name.IndexOf("List", StringComparison.OrdinalIgnoreCase) >= 0||
+                        genericDefinition.Name.IndexOf("Collection", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
                         return true;
                     }

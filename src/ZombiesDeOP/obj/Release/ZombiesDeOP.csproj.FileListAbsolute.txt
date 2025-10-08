@@ -8,3 +8,6 @@ C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\bin\Re
 C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\bin\Release\ZombiesDeOP.pdb
 C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.dll
 C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.pdb
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.csproj.SuggestedBindingRedirects.cache
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\obj\Release\ZombiesDeOP.dll.config
+C:\Users\braia\OneDrive\Desktop\7DtD mods\ZombiesDeOP7DtD\src\ZombiesDeOP\bin\Release\ZombiesDeOP.dll.config

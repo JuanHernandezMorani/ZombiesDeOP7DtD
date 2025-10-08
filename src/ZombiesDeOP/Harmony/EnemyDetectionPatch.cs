@@ -115,7 +115,7 @@ namespace ZombiesDeOP.Harmony
                 if (string.Equals(name, candidate, StringComparison.OrdinalIgnoreCase) ||
                     name.StartsWith(candidate, StringComparison.OrdinalIgnoreCase) ||
                     name.EndsWith(candidate, StringComparison.OrdinalIgnoreCase) ||
-                    name.Contains(candidate, StringComparison.OrdinalIgnoreCase))
+                    name.IndexOf(candidate, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     return true;
                 }
