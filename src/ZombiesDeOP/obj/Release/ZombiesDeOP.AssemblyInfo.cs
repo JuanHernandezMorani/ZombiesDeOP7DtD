@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZombiesDeOP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("2.4.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.4.0+8810989a987c2d88de408fecdba59bb8b17834c8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.4.0+8cae89c90633fe188413381c70145a0203af815a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZombiesDeOP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZombiesDeOP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("2.4.0.0")]

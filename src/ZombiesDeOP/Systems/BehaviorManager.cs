@@ -56,12 +56,12 @@ namespace ZombiesDeOP.Systems
             }
 
             var name = entity.GetType().Name;
-            if (name.Contains("Enemy", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Zombie", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Bandit", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Spider", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Demon", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Mutant", StringComparison.OrdinalIgnoreCase))
+            if (name.IndexOf("Enemy", StringComparison.OrdinalIgnoreCase) >= 0||
+                name.IndexOf("Zombie", StringComparison.OrdinalIgnoreCase) >= 0||
+                name.IndexOf("Bandit", StringComparison.OrdinalIgnoreCase) >= 0||
+                name.IndexOf("Spider", StringComparison.OrdinalIgnoreCase) >= 0||
+                name.IndexOf("Demon", StringComparison.OrdinalIgnoreCase) >= 0||
+                name.IndexOf("Mutant", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 return true;
             }
@@ -72,7 +72,7 @@ namespace ZombiesDeOP.Systems
                 if (aiField != null)
                 {
                     var value = aiField.GetValue(entity)?.ToString();
-                    if (!string.IsNullOrEmpty(value) && value.Contains("Attack", StringComparison.OrdinalIgnoreCase))
+                    if (!string.IsNullOrEmpty(value) && (value.IndexOf("Attack", StringComparison.OrdinalIgnoreCase) >= 0))
                     {
                         return true;
                     }
